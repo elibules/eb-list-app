@@ -1,5 +1,6 @@
 import React from "react";
 import "semantic-ui-css/semantic.css";
+import Task from "../components/Task";
 import {
   Container,
   Dropdown,
@@ -8,61 +9,62 @@ import {
   Input,
   List,
   Button,
+  Grid,
+  Segment,
+  Select,
+  ButtonGroup,
+  Label,
 } from "semantic-ui-react";
 
+const containerStyles = {
+  margin: "20px",
+};
+
 const ListApp = () => {
-  const initialNewTask = {
-    color: "",
-    name: "",
-  };
-
-  const [newTask, setNewTask] = React.useState(initialNewTask);
-  const { name, color } = newTask;
-  const [list, setList] = React.useState([]);
-
-  function addTask() {
-    setList([...list, newTask]);
-    setNewTask(initialNewTask);
-  }
-
-  function changeNewTask(e, { name, value }) {
-    setNewTask({ ...newTask, [name]: value });
-    console.log(newTask);
-  }
-
-  const colorOptions = [
-    { text: "Blue", value: "blue" },
-    { text: "Red", value: "red" },
-    { text: "Yellow", value: "Yellow" },
-  ];
   return (
     <React.Fragment>
-      <Container>
-        <Header as="h1">List App</Header>
-        <Form>
-          <Form.Field
-            control={Input}
-            label="Task Name"
-            name="name"
-            value={name}
-            onChange={changeNewTask}
-          />
-          <Form.Field
-            control={Dropdown}
-            placeholder="Select Task Color"
-            name="color"
-            clearable
-            selection
-            selectOnBlur={false}
-            fluid
-            value={color}
-            options={colorOptions}
-          />
-          <Button onSubmit={addTask}>Submit</Button>
-        </Form>
-        <List>
-          <List.Item color={newTask.color}>{newTask.name}</List.Item>
-        </List>
+      <Container style={containerStyles}>
+        <Grid columns="3">
+          <Grid.Column width="4">
+            <Button icon="bars"></Button>
+          </Grid.Column>
+          <Grid.Column width="8">
+            <Header textAlign="center" as="h1">
+              Todo List
+            </Header>
+          </Grid.Column>
+          <Grid.Column width="4">
+            <Button icon="plus" color="green" textAlign="right"></Button>
+          </Grid.Column>
+        </Grid>
+        <Segment>
+          <Header as="h2">New Task:</Header>
+          <Form>
+            <Form.Field
+              control="input"
+              label="Task Name"
+              placeholder="Enter Task Name..."
+            />
+            <Form.Field
+              control={Select}
+              label="Task Control"
+              placeholder="Choose Task Color"
+              options={[
+                { text: "red", value: "red" },
+                { text: "blue", value: "blue" },
+                { text: "yellow", value: "yellow" },
+              ]}
+            />
+            <Button.Group fluid>
+              <Button color="red">Cancel</Button>
+              <Button.Or />
+              <Button color="green">Add Task</Button>
+            </Button.Group>
+          </Form>
+        </Segment>
+        <Task name="Task 1" color="yellow" />
+        <Task name="Task 2" color="red" />
+        <Task name="Task 3" color="blue" />
       </Container>
     </React.Fragment>
   );
