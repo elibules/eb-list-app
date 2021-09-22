@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunklist_app=self.webpackChunklist_app||[]).push([[678],{7704:function(e,t,n){n.r(t),n.d(t,{default:function(){return a}});var u=n(7294),l=n(3359);function a(){return u.createElement(u.Fragment,null,u.createElement(l.default,null))}}}]);
+//# sourceMappingURL=component---src-pages-index-js-4ebfb269da93d5951a1a.js.map
