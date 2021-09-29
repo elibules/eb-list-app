@@ -1,6 +1,7 @@
 import React from "react";
 import "semantic-ui-css/semantic.css";
 import NewTaskForm from "../components/NewTaskForm";
+import EditTaskForm from "../components/EditTaskForm";
 import Task from "../components/Task";
 import { Container, Header, Button, Grid, List } from "semantic-ui-react";
 
@@ -15,10 +16,16 @@ const buttonStyles = {
 };
 const ListApp = () => {
   const [newTaskOpen, setNewTaskOpen] = React.useState(false);
+  const [editTaskOpen, setEditTaskOpen] = React.useState(false);
   const [newTask, setNewTask] = React.useState({
     name: "",
     color: "",
   });
+  const [editedTask, setEditedTask] = React.useState({
+    name: "",
+    color: "",
+  });
+  const [currentInd, setCurrentInd] = React.useState(0);
   const [list, setList] = React.useState([]);
 
   function openNewTask() {
@@ -26,6 +33,12 @@ const ListApp = () => {
   }
   function closeNewTask() {
     setNewTaskOpen(false);
+  }
+  function openEditTask() {
+    setEditTaskOpen(true);
+  }
+  function closeEditTask() {
+    setEditTaskOpen(false);
   }
   function addNewTask() {
     const listClone = [...list];
@@ -37,18 +50,27 @@ const ListApp = () => {
     });
     closeNewTask();
   }
-  function editTask(ind) {
+  function editTask() {
     const newList = list.map((task, i) => {
-      if (i !== ind) return task;
+      if (i !== currentInd) return task;
       return {
-        name: `Edit ${task.name}`,
-        color: task.color,
+        name: editedTask.name,
+        color: editedTask.color,
       };
     });
     setList(newList);
+    setEditedTask({
+      name: "",
+      color: "",
+    });
   }
-  function deleteTask() {
-    // Array.filter
+  function deleteTask(ind) {
+    const newList = [...list];
+    const thisInd = ind;
+    const filteredArray = newList.filter((value, ind) => {
+      return ind != thisInd;
+    });
+    setList(filteredArray);
   }
   const taskList = list.map((task, index) => {
     return (
@@ -56,7 +78,9 @@ const ListApp = () => {
         name={task.name}
         color={task.color}
         key={`${task.name}-${index}`}
-        editTask={editTask}
+        setCurrentInd={setCurrentInd}
+        openEditTask={openEditTask}
+        deleteTask={deleteTask}
         index={index}
       />
     );
@@ -89,6 +113,15 @@ const ListApp = () => {
             addNewTask={addNewTask}
             newTask={newTask}
             setNewTask={setNewTask}
+          />
+        ) : null}
+        {editTaskOpen ? (
+          <EditTaskForm
+            closeEditTask={closeEditTask}
+            editedTask={editedTask}
+            setEditedTask={setEditedTask}
+            editTask={editTask}
+            setEditTaskOpen={setEditTaskOpen}
           />
         ) : null}
         <List>{taskList}</List>
